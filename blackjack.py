@@ -11,27 +11,27 @@ class BlackJack:
         self.players.append(dealer)
         self.currentDeck = FiftyTwoCardDeck()
         self.currentDeck.shuffle()
-        this.currentHand = None
+        self.currentRound = None
 
-    def playHand(self):
+    def playRound(self):
         self.initialDeal()
 
     def initialDeal(self):
         ''' Provide initial deal to all players. '''
-        this.currentHand = Hand(self.players)
+        self.currentRound = Round(self.players)
         i = 0
         # deal 2 cards to each player
         while i < 2:
             for currentPlayer in self.players:
                 currentCard = self.currentDeck.drawCard()
-                currentHand.giveCardToPlayer(currentCard, currentPlayer)
+                self.currentRound.giveCardToPlayer(currentCard, currentPlayer)
             i += 1
+        print(self.currentRound)
 
     def turnByPlayer(self, player):
+        pass;
 
-
-
-class Hand:
+class Round:
 
     def __init__(self, players):
         self.players = players
