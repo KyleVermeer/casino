@@ -7,8 +7,9 @@ class BlackJack:
         # @TODO: Consider moving to 'table' instead of players
         self.players = players
         dealer = Player(0)
-        dealer.setDealer = True
+        dealer.setDealer(True)
         self.players.append(dealer)
+        print(self.players)
         self.currentDeck = FiftyTwoCardDeck()
         self.currentDeck.shuffle()
         self.currentRound = None
@@ -24,6 +25,9 @@ class BlackJack:
         while i < 2:
             for currentPlayer in self.players:
                 currentCard = self.currentDeck.drawCard()
+                # Deal with first dealer card facedown
+                if i == 0 and currentPlayer.isDealer():
+                    currentCard.setFaceDown(True)
                 self.currentRound.giveCardToPlayer(currentCard, currentPlayer)
             i += 1
         print(self.currentRound)
