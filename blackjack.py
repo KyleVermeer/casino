@@ -6,10 +6,13 @@ class BlackJack:
     def __init__(self, players):
         # @TODO: Consider moving to 'table' instead of players
         self.players = players
+
+        # Initialize a dealer
         dealer = Player(0)
         dealer.setDealer(True)
         self.players.append(dealer)
-        print(self.players)
+
+        #Intialize a deck
         self.currentDeck = FiftyTwoCardDeck()
         self.currentDeck.shuffle()
         self.currentRound = None
@@ -28,9 +31,11 @@ class BlackJack:
                 # Deal with first dealer card facedown
                 if i == 0 and currentPlayer.isDealer():
                     currentCard.setFaceDown(True)
-                self.currentRound.giveCardToPlayer(currentCard, currentPlayer)
+                handForPlayer = self.currentRound.getHandForPlayer(currentPlayer)
+                handForPlayer.addCard(currentCard)
             i += 1
-        print(self.currentRound)
+
+        self.currentRound.printCounts()
 
     def turnByPlayer(self, player):
         pass;
@@ -39,29 +44,60 @@ class Round:
 
     def __init__(self, players):
         self.players = players
-        self.playerToCards = {}
+        self.__playerToHand = {}
         # initialize cards for players map
         for currentPlayer in self.players:
-            self.playerToCards[currentPlayer.getUserId()] = []
+            self.__playerToHand[currentPlayer.getUserId()] = Hand(currentPlayer)
 
     def __repr__(self):
         return str(self)
 
     def __str__(self):
-        return str(self.playerToCards)
+        return str(self.playerToHand)
 
-    def giveCardToPlayer(self, card, player):
-        ''' Give card to player. '''
-        self.playerToCards[player.getUserId()].append(card)
+    def getHandForPlayer(self, player):
+        ''' Returns the hand for the givne player. '''
+        return self.__playerToHand[player.getUserId()]
 
-class PlayerCards:
+    def printCounts(self):
+        ''' Prints the count of each hand. '''
+        for currentHand in self.__playerToHand.values():
+            print(str(currentHand) + " - Count: " + str(currentHand.getCount()))
+
+class Hand:
 
     def __init__(self, player):
-        this.player = player
-        this.cards = []
+        self.__player = player
+        self.__cards = []
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return str(self.__cards)
 
     def addCard(self, card):
-        this.cards.append(card)
+        self.__cards.append(card)
+
+    def getCount(self):
+        ''' Returns the current count for the hand (sum of all the card values).
+            @NOTE (kvermeer): Heavily consider moving this to a strategy class.
+            '''
+        currentCount = 0
+        print(Rank.Two.name)
+        for currentCard in self.__cards:
+            cardRank = currentCard.getRank()
+            # Less than a face card, just count value
+            if (cardRank.value <= 10):
+                    currentCount += cardRank.value
+            else:
+                # Count Aces
+                if (cardRank == Rank.Ace):
+                    currentCount += 11
+                # Count Face cards
+                else:
+                    currentCount += 10
+        return currentCount
 
 game = BlackJack([Player(1), Player(2)])
 game.initialDeal()
