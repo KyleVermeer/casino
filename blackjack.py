@@ -19,6 +19,8 @@ class BlackJack:
 
     def playRound(self):
         self.initialDeal()
+        for currentPlayer in self.__players:
+            self.playHand(currentPlayer)
 
     def initialDeal(self):
         ''' Provide initial deal to all players. '''
@@ -35,10 +37,31 @@ class BlackJack:
                 handForPlayer.addCard(currentCard)
             i += 1
 
-        self.__currentRound.printCounts()
+    def playHand(self, player):
+        ''' Plays the current hand for the given player. '''
+        currentHand = self.__currentRound.getHandForPlayer(player)
+        while True:
+            playerAction = self.__figureOutPlayerAction(player)
+            if playerAction is "stay":
+                break;
+            elif playerAction is "hit":
+                newCard = self.__currentDeck.drawCard();
+                currentHand.addCard(newCard);
+            else:
+                print("Unkown Action:", playerAction)
 
-    def turnByPlayer(self, player):
-        pass;
+    def __figureOutPlayerAction(self, player):
+        currentHand = self.__currentRound.getHandForPlayer(player)
+        print("Current Hand: " + str(currentHand) + " - Count: " + str(currentHand.getCount()))
+        # Continue to loop until they enter a valid response
+        while True:
+            response = input('What would you like to do? "hit" (h) or "stay" (s)?\n')
+            if response in ["hit","h"]:
+                return "hit"
+            elif response in ["stay","s"]:
+                return "stay"
+            else:
+                print('\"',response,'\" is not a valid response.')
 
 class Round:
 
@@ -84,12 +107,11 @@ class Hand:
             @NOTE (kvermeer): Heavily consider moving this to a strategy class.
             '''
         currentCount = 0
-        print(Rank.Two.name)
         for currentCard in self.__cards:
             cardRank = currentCard.getRank()
             # Less than a face card, just count value
             if (cardRank.value <= 10):
-                    currentCount += cardRank.value
+                currentCount += cardRank.value
             else:
                 # Count Aces
                 if (cardRank == Rank.Ace):
@@ -100,4 +122,4 @@ class Hand:
         return currentCount
 
 game = BlackJack([Player(1), Player(2)])
-game.initialDeal()
+game.playRound()
