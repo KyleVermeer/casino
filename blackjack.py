@@ -5,37 +5,37 @@ class BlackJack:
 
     def __init__(self, players):
         # @TODO: Consider moving to 'table' instead of players
-        self.players = players
+        self.__players = players
 
         # Initialize a dealer
         dealer = Player(0)
         dealer.setDealer(True)
-        self.players.append(dealer)
+        self.__players.append(dealer)
 
         #Intialize a deck
-        self.currentDeck = FiftyTwoCardDeck()
-        self.currentDeck.shuffle()
-        self.currentRound = None
+        self.__currentDeck = FiftyTwoCardDeck()
+        self.__currentDeck.shuffle()
+        self.__currentRound = None
 
     def playRound(self):
         self.initialDeal()
 
     def initialDeal(self):
         ''' Provide initial deal to all players. '''
-        self.currentRound = Round(self.players)
+        self.__currentRound = Round(self.__players)
         i = 0
         # deal 2 cards to each player
         while i < 2:
-            for currentPlayer in self.players:
-                currentCard = self.currentDeck.drawCard()
+            for currentPlayer in self.__players:
+                currentCard = self.__currentDeck.drawCard()
                 # Deal with first dealer card facedown
                 if i == 0 and currentPlayer.isDealer():
                     currentCard.setFaceDown(True)
-                handForPlayer = self.currentRound.getHandForPlayer(currentPlayer)
+                handForPlayer = self.__currentRound.getHandForPlayer(currentPlayer)
                 handForPlayer.addCard(currentCard)
             i += 1
 
-        self.currentRound.printCounts()
+        self.__currentRound.printCounts()
 
     def turnByPlayer(self, player):
         pass;
@@ -43,17 +43,17 @@ class BlackJack:
 class Round:
 
     def __init__(self, players):
-        self.players = players
+        self.__players = players
         self.__playerToHand = {}
         # initialize cards for players map
-        for currentPlayer in self.players:
+        for currentPlayer in self.__players:
             self.__playerToHand[currentPlayer.getUserId()] = Hand(currentPlayer)
 
     def __repr__(self):
         return str(self)
 
     def __str__(self):
-        return str(self.playerToHand)
+        return str(self.__playerToHand)
 
     def getHandForPlayer(self, player):
         ''' Returns the hand for the givne player. '''
