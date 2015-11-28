@@ -38,6 +38,3 @@ class FiftyTwoCardDeck(Deck):
         for currentSuit in list(Suit):
             for currentRank in list(Rank):
                 self.cards.append(PlayingCard(currentRank, currentSuit))
-
-curDeck = FiftyTwoCardDeck()
-curDeck.shuffle()
