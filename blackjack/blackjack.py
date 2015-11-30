@@ -121,5 +121,5 @@ class Hand:
                     currentCount += 10
         return currentCount
 
-game = BlackJack([Player(1), Player(2)])
-game.playRound()
+#game = BlackJack([Player(1), Player(2)])
+#game.playRound()
