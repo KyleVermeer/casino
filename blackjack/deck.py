@@ -1,5 +1,5 @@
 import random
-from card import PlayingCard, Suit, Rank
+from .card import PlayingCard, Suit, Rank
 
 class Deck:
 

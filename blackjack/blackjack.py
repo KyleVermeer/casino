@@ -1,5 +1,5 @@
-from deck import *
-from player import *
+from .deck import *
+from .player import *
 
 class BlackJack:
 
